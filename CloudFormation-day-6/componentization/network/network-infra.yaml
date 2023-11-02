@@ -12,30 +12,37 @@ Metadata:
   DevVPCEnableDnsSupportpara:
     Description: Please enable DNS support (True/False)
     Type: String
+    Default: true
 
   DevWebserverSubnetAZpara:
     Description: Please select an AZ for the DevWebserver Subnet
     Type: 'AWS::EC2::AvailabilityZone::Name'
+    Default: ca-central-1
 
   DevWebserverSubnetCidrBlockpara:
     Description: Please provide the Cidr block for your Devwebserver subnet
     Type: String
+    Default: 10.0.1.0/24
 
   DevAppserverSubnetAZpara:
     Description: Please select an AZ for the DevAppserver Subnet
     Type: 'AWS::EC2::AvailabilityZone::Name'
+    Default: ca-central-l
 
   DevAppserverSubnetCidrBlockpara:
     Description: Please provide the Cidr block for your DevAppserver subnet
     Type: String
+    Default: 10.0.2.0/24
 
   DevDBserverSubnetCidrBlockpara:
     Description: Please provide the Cidr block for your DevDBserver subnet
     Type: String
+    Default: 10.0.3.0/24
 
   DevDBserverSubnetAZpara:
     Description: Please select an AZ for the DevDBserver Subnet
     Type: 'AWS::EC2::AvailabilityZone::Name'
+    Default: ca-central-1
 
 Mappings: {}
 
@@ -81,4 +88,26 @@ Resources:
         - Key: Name
           Value: DevDBserverSubnet
 
-Outputs: {}
+  # database server subnet
+  DevDBserverSubnet:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      AvailabilityZone: !Ref DevDBserverSubnetAZpara
+      VpcId: !Ref DevVPC
+      CidrBlock: !Ref DevDBserverSubnetCidrBlockpara
+      Tags:
+        - Key: Name
+          Value: DevDBserverSubnet
+
+Outputs: 
+  DevVPCIDExportOutput:
+    Description: Exporting Dev, VPC and ID
+    Value: !Ref DevVPC
+    Export: 
+      Name: DevVPCID
+
+  DevWebserverSubnetIDExportOutput:
+    Description: Exporting DevWebserver  subnet ID
+    Value: !Ref DevWebserverSubnet
+    Export: 
+      Name: DevWebserverSubnetID
